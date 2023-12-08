@@ -8,7 +8,6 @@ import { DatabaseObjectResponse } from '@notionhq/client/build/src/api-endpoints
 import Masonry from 'react-masonry-css'
 import { Modal } from '@/components/Modal'
 import { useState } from 'react'
-import { inView } from "framer-motion"
 
 export const fontJulius = Julius_Sans_One({
   weight: '400',
