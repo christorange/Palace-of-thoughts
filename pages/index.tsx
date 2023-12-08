@@ -8,6 +8,7 @@ import { DatabaseObjectResponse } from '@notionhq/client/build/src/api-endpoints
 import Masonry from 'react-masonry-css'
 import { Modal } from '@/components/Modal'
 import { useState } from 'react'
+import { inView } from "framer-motion"
 
 export const fontJulius = Julius_Sans_One({
   weight: '400',
@@ -74,11 +75,14 @@ export default function Home(
   }
 
   const breakpointColumnsObj = {
-    default: 5,
+    default: 6,
+    2000: 6,
+    1280: 5,
     1000: 4,
     768: 3,
     640: 2
   }
+
   return (
     <main className='min-h-screen min-w-[800px]'>
       <Header />
@@ -94,7 +98,8 @@ export default function Home(
         >
           {
             imgData.map((e: ImgDataProps, index: number) => (
-              <Card 
+              <Card
+                id='card'
                 key={index}
                 title={e.title}
                 img ={e.url}

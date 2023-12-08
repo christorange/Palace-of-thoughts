@@ -1,6 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react"
 import { HTMLProps, FC, Fragment } from "react"
-import { cn } from "@/lib/utils"
 
 interface ModalProps extends HTMLProps<HTMLElement> {
   open: boolean
