@@ -1,3 +1,46 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components{
+  .img-bw{
+    filter: grayscale(100%);
+  }
+
+  .img-colored{
+    filter: grayscale(0%);
+  }
+  
+  .font-Julius{
+    font-family: 'Julius Sans One', sans-serif;
+  }
+
+  .font-Inknut{
+    font-family: 'Inknut Antiqua', serif;
+  }
+  
+  .text-border{
+    color: #a6a7a6;
+    text-shadow: 
+      -0.5px -0.5px 0 #595959,  
+      0.5px -0.5px 0 #595959,
+      -0.5px  0.5px 0 #595959,
+      0.5px  0.5px 0 #595959;
+  }
+
+  .text-border-dark{
+    color: #77787b;
+    text-shadow: 
+      -0.5px -0.5px 0 #595959,  
+      0.5px -0.5px 0 #595959,
+      -0.5px  0.5px 0 #595959,
+      0.5px  0.5px 0 #595959;
+  }
+}
+
+html,body{
+  margin: 0;
+  padding: 0;
+  font-family: 'Julius Sans One', sans-serif;
+}
+

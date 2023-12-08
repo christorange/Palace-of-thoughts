@@ -1,6 +1,5 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
-import { cn } from '@/lib/utils'
 import { Julius_Sans_One } from 'next/font/google'
 import Head from 'next/head'
 
@@ -16,9 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>Filter of Inspirations</title>
       </Head>
-      <body className={cn(fontJulius.variable)}>
-        <Component {...pageProps} />
-      </body>
+      <Component {...pageProps} />
     </>
   )
 }
