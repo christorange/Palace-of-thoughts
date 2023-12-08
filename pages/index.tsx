@@ -1,7 +1,13 @@
-import Image from 'next/image'
 import { Julius_Sans_One, Inknut_Antiqua } from 'next/font/google'
 import { Header } from '@/components/Header'
 import { Card } from '@/components/Card'
+import { GetStaticProps } from 'next'
+import { Client } from '@notionhq/client'
+import { InferGetStaticPropsType } from 'next'
+import { DatabaseObjectResponse } from '@notionhq/client/build/src/api-endpoints'
+import Masonry from 'react-masonry-css'
+import { Modal } from '@/components/Modal'
+import { useState } from 'react'
 
 export const fontJulius = Julius_Sans_One({
   weight: '400',
@@ -15,9 +21,64 @@ export const fontInknut = Inknut_Antiqua({
   variable: '--font-secondary'
 })
 
-const data = [1,2,3,4,5,6,7,8,9,1,1,1,1,1,1,1,1,1,1,1]
+interface ImgDataProps {
+  title: string
+  feeling: string
+  note: string
+  url: string
+}
 
-export default function Home() {
+export const getStaticProps: GetStaticProps = async () => {
+  
+  const notion = new Client({
+    auth: process.env.NOTION_TOKEN
+  })
+
+  const databaseId = process.env.NOTION_DATABASE_ID as string
+  const res = await notion.databases.query({
+    database_id: databaseId
+  })
+
+  const results = res.results as DatabaseObjectResponse[]
+  let imgData: ImgDataProps[] = []
+
+  results.map((item) => {
+    imgData.push({
+      // @ts-ignore
+      title: item.properties.title.title[0].plain_text,
+      // @ts-ignore
+      feeling: item.properties.feeling.rich_text[0].plain_text,
+      // @ts-ignore
+      note: item.properties.note.rich_text[0].plain_text,
+      // @ts-ignore
+      url: item.properties.image.files[0].file.url
+    })
+  })
+
+  return {
+    props: {
+      imgData
+    }
+  }
+}
+
+export default function Home(
+  { imgData }: InferGetStaticPropsType<typeof getStaticProps>
+){
+  const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const [modalData, setModalData] = useState<ImgDataProps>(imgData[0])
+
+  const handleCardClick = (data: ImgDataProps) => {
+    setModalOpen(true)
+    setModalData(data)
+  }
+
+  const breakpointColumnsObj = {
+    default: 5,
+    1000: 4,
+    768: 3,
+    640: 2
+  }
   return (
     <main className='min-h-screen min-w-[800px]'>
       <Header />
@@ -26,21 +87,34 @@ export default function Home() {
           Palace of thoughts
         </h1>
         <div className='w-full h-[2px] bg-primary-400'></div>
-        <section className='mt-6 grid grid-cols-5 w-full gap-5 place-items-center justify-center'>
+        <Masonry
+          breakpointCols={breakpointColumnsObj}
+          className='flex w-auto gap-4'
+          columnClassName='bg-clip-padding'
+        >
           {
-            data.map((item, index) => (
+            imgData.map((e: ImgDataProps, index: number) => (
               <Card 
                 key={index}
-                title='test'
-                img ='https://assets.vogue.com/photos/5c1952f0ae39a02cec3bd46a/4:3/w_1600%2Cc_limit/00-promo-galiano-getty.jpg'
-                feeling='test'
-                note='test'
-                className='mt-2'
+                title={e.title}
+                img ={e.url}
+                feeling={e.feeling}
+                note={e.note}
+                className='mt-5'
+                onClick={() => handleCardClick(e)}
               />
             ))
           }
-        </section>
+        </Masonry>
       </section>
+      <Modal
+        title={modalData.title}
+        img={modalData.url}
+        feeling={modalData.feeling}
+        note={modalData.note}
+        open={modalOpen}
+        onClose={()=>setModalOpen(false)}
+      />
     </main>
   )
 }

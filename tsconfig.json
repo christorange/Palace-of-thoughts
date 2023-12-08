@@ -29,7 +29,7 @@
     "**/*.ts",
     "**/*.tsx",
     "tailwind.config.js"
-  ],
+, "notion.js"  ],
   "exclude": [
     "node_modules"
   ]
