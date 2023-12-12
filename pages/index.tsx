@@ -1,9 +1,9 @@
 import { Julius_Sans_One, Inknut_Antiqua } from 'next/font/google'
 import { Header } from '@/components/Header'
 import { Card } from '@/components/Card'
-import { GetStaticProps } from 'next'
+import { GetServerSideProps } from 'next'
 import { Client } from '@notionhq/client'
-import { InferGetStaticPropsType } from 'next'
+import { InferGetServerSidePropsType } from 'next'
 import { DatabaseObjectResponse } from '@notionhq/client/build/src/api-endpoints'
 import Masonry from 'react-masonry-css'
 import { Modal } from '@/components/Modal'
@@ -28,7 +28,7 @@ interface ImgDataProps {
   url: string
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   
   const notion = new Client({
     auth: process.env.NOTION_TOKEN
@@ -63,7 +63,7 @@ export const getStaticProps: GetStaticProps = async () => {
 }
 
 export default function Home(
-  { imgData }: InferGetStaticPropsType<typeof getStaticProps>
+  { imgData }: InferGetServerSidePropsType<typeof getServerSideProps>
 ){
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [modalData, setModalData] = useState<ImgDataProps>(imgData[0])
